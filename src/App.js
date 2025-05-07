@@ -1,25 +1,32 @@
 import React, { useState } from 'react';
 import FormFuncionario from './components/FormFuncionario';
+import FormProduto from './components/FormProduto';
 
 function App() {
   const [funcionarios, setFuncionarios] = useState([]);
+  const [produtos, setProdutos] = useState([]);
 
   const adicionarFuncionario = (novo) => {
     setFuncionarios([...funcionarios, novo]);
   };
 
+  const adicionarProduto = (novoProduto) => {
+    setProdutos([...produtos, novoProduto]);
+  };
+
   return (
-    <div style={{ maxWidth: 900, margin: '40px auto', padding: 20 }}>
-      <h1 style={{ textAlign: 'center' }}>Sistema de Produção - Funcionários</h1>
+    <div className="container">
+      <h1 style={{ textAlign: 'center' }}>Sistema de Produção</h1>
 
       <FormFuncionario onAdd={adicionarFuncionario} />
+      <FormProduto onAdd={adicionarProduto} />
 
-      <h2>Funcionários cadastrados:</h2>
-      <table border="1" cellPadding="8" cellSpacing="0" style={{ width: '100%', background: '#fff' }}>
+      <h2>Funcionários Cadastrados</h2>
+      <table>
         <thead>
           <tr>
             <th>Nome</th>
-            <th>Salário (R$)</th>
+            <th>Salário</th>
             <th>Horas/Mês</th>
             <th>Custo/Hora</th>
             <th>Custo/Min</th>
@@ -35,6 +42,36 @@ function App() {
               <td>R$ {f.custoHora.toFixed(2)}</td>
               <td>R$ {f.custoMinuto.toFixed(4)}</td>
               <td>R$ {f.custoSegundo.toFixed(6)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <h2>Produtos Cadastrados</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Tempo Total</th>
+            <th>Processos</th>
+          </tr>
+        </thead>
+        <tbody>
+          {produtos.map((prod, i) => (
+            <tr key={i}>
+              <td>{prod.nome}</td>
+              <td>
+                {Math.floor(prod.tempoTotalSegundos / 60)}min {prod.tempoTotalSegundos % 60}s
+              </td>
+              <td>
+                <ul>
+                  {prod.processos.map((p, j) => (
+                    <li key={j}>
+                      {p.nome} - {Math.floor(p.tempoSegundos / 60)}min {p.tempoSegundos % 60}s - Máquina: {p.maquina}
+                    </li>
+                  ))}
+                </ul>
+              </td>
             </tr>
           ))}
         </tbody>
